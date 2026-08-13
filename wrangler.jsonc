@@ -1,0 +1,19 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "pakenham-13-cabs",
+  "main": "./worker/index.ts",
+  "compatibility_date": "2026-05-15",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": "dist/client",
+    "binding": "ASSETS"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "pakenham-bookings",
+      "database_id": "b4c9b416-f85c-4e80-a574-cdf5ee225b59"
+    }
+  ],
+  "observability": { "enabled": true }
+}
