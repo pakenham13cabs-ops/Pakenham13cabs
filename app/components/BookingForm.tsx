@@ -38,7 +38,7 @@ export function BookingForm({ variant = "compact", source = "website" }: Props) 
       if (!response.ok || !result.reference) throw new Error(result.error || "We could not send your booking request.");
       form.reset();
       trackBookingSubmitted(result.reference);
-      router.push(`/booking-thank-you?ref=${encodeURIComponent(result.reference)}`);
+      router.push("/booking-thank-you");
     } catch (error) {
       setState({ kind: "error", message: error instanceof Error ? error.message : "Something went wrong. Please call us." });
     }
