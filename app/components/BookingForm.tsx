@@ -1,6 +1,8 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { useRouter } from "next/navigation";
+import { trackBookingSubmitted } from "./GoogleTagManager";
 import { PHONE_DISPLAY, PHONE_HREF } from "../site-config";
 
 type Props = { variant?: "compact" | "full"; source?: string };
@@ -23,6 +25,7 @@ function melbourneNow() {
 export function BookingForm({ variant = "compact", source = "website" }: Props) {
   const [state, setState] = useState<State>({ kind: "idle" });
   const [now] = useState(melbourneNow);
+  const router = useRouter();
   const full = variant === "full";
 
   async function submit(event: FormEvent<HTMLFormElement>) {
@@ -34,7 +37,8 @@ export function BookingForm({ variant = "compact", source = "website" }: Props) 
       const result = (await response.json()) as BookingResult;
       if (!response.ok || !result.reference) throw new Error(result.error || "We could not send your booking request.");
       form.reset();
-      setState(result.notification === "sent" ? { kind: "success", reference: result.reference } : { kind: "warning", reference: result.reference });
+      trackBookingSubmitted(result.reference);
+      router.push(`/booking-thank-you?ref=${encodeURIComponent(result.reference)}`);
     } catch (error) {
       setState({ kind: "error", message: error instanceof Error ? error.message : "Something went wrong. Please call us." });
     }
